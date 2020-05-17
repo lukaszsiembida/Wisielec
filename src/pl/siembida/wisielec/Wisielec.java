@@ -20,19 +20,49 @@ public class Wisielec {
         String word = words[nrOfWord];
         boolean[] guessed = new boolean[word.length()];
         char c;
+        int foults = 10;
         System.out.println("*******************Gra w wisielca*******************");
         do {
             System.out.println("Zgadujesz kolejne litery w słowie: ");
             System.out.println(guessedWord(word, guessed));
             System.out.println("Podaj literę: ");
             c = sc.next().charAt(0);
-        } while (true);
+            if (!tryLetter(word, guessed, c)) {
+                foults--;
+                // rysowanie wisielca
+                for (int i = 0; i < 10 - foults; i++) {
+                    System.out.print("X ");
+                }
+                System.out.println();
+            }
+        } while (foults > 0 && !isGuessed(guessed));
+
+        if(foults==0){
+            System.out.println("\n*************");
+            System.out.println("Przegrałeś!");
+            System.out.println("***********\n");
+        } else{
+            System.out.println("\n*************");
+            System.out.println("Wygrałeś!\nOdgadłeś słowo: "+ word);
+            System.out.println("***********\n");
+        }
+
     }
 
-    private static boolean tryLetter(String word, boolean[] guess, char c){
+    private static boolean isGuessed(boolean[] guess) {
+        for (int i = 0; i < guess.length; i++) {
+            if (guess[i] == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private static boolean tryLetter(String word, boolean[] guess, char c) {
         boolean goal = false;
-        for (int i = 0; i < word.length() ; i++) {
-            if(word.charAt(i) == c){
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == c) {
                 guess[i] = true;
                 goal = true;
             }
